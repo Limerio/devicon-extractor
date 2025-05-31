@@ -1,0 +1,33 @@
+name: Format and Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  fmt-and-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: "1.21"
+
+      - name: Format code
+        run: |
+          go fmt ./...
+          if [ -n "$(git diff --name-only)" ]; then
+            echo "Code is not formatted. The following files were changed:"
+            git diff --name-only
+            echo "Please run 'go fmt ./...' locally and commit the changes."
+            exit 1
+          fi
+
+      - name: Build application
+        run: go build -v .
