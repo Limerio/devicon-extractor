@@ -242,7 +242,8 @@ func (ie *IconExtractor) processTechDirectory(techPath, techName string) error {
 func (ie *IconExtractor) selectBestSVG(svgFiles []string, techName string) string {
 	for _, file := range svgFiles {
 		fileName := filepath.Base(file)
-		if strings.Contains(strings.ToLower(fileName), "original") {
+		fileNameLower := strings.ToLower(fileName)
+		if strings.Contains(fileNameLower, "original") && !strings.Contains(fileNameLower, "original-wordmark") {
 			return file
 		}
 	}
